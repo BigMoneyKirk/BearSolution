@@ -20,12 +20,28 @@ namespace BearSolution
             DataSet ds = GetDisconnectedResult(con, query);
 
             //Console.WriteLine(ds.GetXml());
-            ShowReadResult(con, query);
+            //ShowReadResult(con, query);
 
             /*
              * This is where I started writing my code.
              * Make xml -> dataset, and then query something using LINQ
             */
+
+            DataTable bears = ds.Tables["Hibernation.Bear"];
+
+            var question = from d in bears.AsEnumerable()
+                           select new
+                           {
+                               Name = d.Field<string>("Name")
+                           };
+
+            foreach (var q in question)
+            {
+                Console.WriteLine("Bear Name = {0}",
+                q.Name);
+            }
+
+
 
             Console.ReadLine();
         }
