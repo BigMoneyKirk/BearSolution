@@ -12,17 +12,16 @@ namespace BearSolution
     {
         static void Main(string[] args)
         {
-            //OpenSqlConnection();
-
             string con = GetConnectionString();
             string query = GetQueryString();
 
-            //DataSet ds = GetDisconnectedResult(con, query);
+            DataSet ds = new DataSet();
+            ds = GetDisconnectedResult(con, query);
 
-            //Console.WriteLine(ds.GetXml());
-            ShowReadResult(con, query);
+            // returns the bears' first names
+            //ShowReadResult(con, query);
 
-
+            Console.WriteLine(ds.GetXml());
 
             Console.ReadLine();
         }
@@ -44,7 +43,6 @@ namespace BearSolution
                         // look up MSDN documentation for SqlDataReader
                         // print out list of bears
                         Console.WriteLine($"{reader[2]}");
-                        //Console.WriteLine($"{reader.GetString(0)}");
                     }
                     reader.Close();
                 }
@@ -62,12 +60,23 @@ namespace BearSolution
             using (SqlConnection sqlcon = new SqlConnection(connection))
             {
                 DataSet ds = new DataSet();
-                SqlDataAdapter adapter = new SqlDataAdapter(GetQueryString(), GetConnectionString());
-                adapter.SelectCommand = new SqlCommand(query,sqlcon);
-                adapter.Fill(ds);
+                //SqlDataAdapter adapter = new SqlDataAdapter(GetQueryString(), GetConnectionString());
+                //adapter.SelectCommand = new SqlCommand(query,sqlcon);
+                AddBear(sqlcon).Fill(ds);
+                //adapter;
 
                 return ds;
             }
+        }
+
+        public static SqlDataAdapter AddBear(SqlConnection connection)
+        {
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlCommand command = new SqlCommand(
+                "INSERT INTO Hibernation.Bear VALUES (4, 'Papa Bear', 1000, 1, 3, 1)", connection);
+
+            adapter.SelectCommand = command;
+            return adapter;
         }
 
         public static void OpenSqlConnection()
@@ -91,8 +100,7 @@ namespace BearSolution
 
         private static string GetQueryString()
         {
-            return "SELECT * FROM Hibernation.Bear;"; //+ 
-                //"select* from Bear_Caves";
+            return "SELECT * FROM Hibernation.Bear;";
         }
 
     }
