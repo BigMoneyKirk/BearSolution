@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BearSolution
 {
@@ -60,10 +56,10 @@ namespace BearSolution
             using (SqlConnection sqlcon = new SqlConnection(connection))
             {
                 DataSet ds = new DataSet();
-                //SqlDataAdapter adapter = new SqlDataAdapter(GetQueryString(), GetConnectionString());
-                //adapter.SelectCommand = new SqlCommand(query,sqlcon);
-                AddBear(sqlcon).Fill(ds);
-                //adapter;
+                SqlDataAdapter adapter = new SqlDataAdapter();// query, connection);
+                adapter.SelectCommand = new SqlCommand(query,sqlcon);
+                adapter.Fill(ds);
+                //AddBear(sqlcon).Fill(ds);
 
                 return ds;
             }
@@ -100,7 +96,7 @@ namespace BearSolution
 
         private static string GetQueryString()
         {
-            return "SELECT * FROM Hibernation.Bear;";
+            return "SELECT * FROM BearName_Type_Cave";
         }
 
     }
